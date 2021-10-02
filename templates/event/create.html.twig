@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center vh-80">
+            <div class="col-md-6">
+                <div class="card border-0 shadow">
+                    <div class="card-body">
+                        <h4>Create Event</h4>
+                        {{ form_start(eventForm) }}
+                        {{ form_row(eventForm.title) }}
+                        {{ form_row(eventForm.description) }}
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">{{ 'event.form.start-end-date'|trans }}</span>
+                            {{ form_widget(eventForm.startsAt) }}
+                            {{ form_widget(eventForm.endsAt) }}
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">{{ 'event.form.rsvp-date'|trans }}</span>
+                            {{ form_widget(eventForm.rsvpBy) }}
+                        </div>
+                        {{ form_row(eventForm.isOnline) }}
+                        {{ form_row(eventForm.link) }}
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-dark">{{ 'event.form.save'|trans }}</button>
+                        </div>
+                        {{ form_end(eventForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

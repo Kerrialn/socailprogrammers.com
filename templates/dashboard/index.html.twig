@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center vh-80 mt-4">
+
+            <div class="col-md-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h4 class="m-0">Dashboard</h4>
+                        <hr class="m-4"/>
+                        <div class="row justify-content-between">
+                            <div class="col-6 col-md-6">
+                                <div class="card card-body text-center">
+                                    <i class="bi bi-bank2 h4 m-0"></i>
+                                    <a class="stretched-link text-black text-decoration-none" href="{{ path('user.account') }}">Account</a>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6">
+                                <div class="card card-body text-center">
+                                    <i class="bi bi-calendar-event h4 m-0"></i>
+                                    <a class="stretched-link text-black text-decoration-none" href="{{ path('events') }}">Events</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="card border-0">
+
+                    <div class="card-body">
+                        <h3>What programming languages or technologies are you interesting in?</h3>
+                        {{ form_start(tagForm) }}
+                        <div class="input-group mb-3">
+                            {{ form_widget(tagForm.title) }}
+                            {{ form_widget(tagForm.level) }}
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-light">save</button>
+                        </div>
+                        {{ form_end(tagForm) }}
+                    </div>
+                </div>
+            </div>
+
+            {% if app.user.tags|length > 0 %}
+                <div class="col-md-12">
+                    <h4 class="display-6 m-0">Interests</h4>
+                    <hr>
+                    <div class="d-flex">
+                        {% for tag in app.user.tags %}
+                            <div class="rounded p-2 bg-light text-dark ms-3">
+                                <div class="d-flex justify-content-center">
+                                    <h5 class="m-0">{{ tag.title }}</h5>
+                                    <div class="ms-2">
+                                        <a class="text-black btn-link"
+                                           href="{{ path('user.remove.tag', {id: tag.id}) }}">
+                                            <i class="bi bi-x-circle-fill"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="m-1">
+                                <div class="small fw-light">{{ tag.level }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

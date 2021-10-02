@@ -7,28 +7,33 @@
         <div class="row justify-content-center mt-5">
             <div class="col-md-8">
 
-                <div class="p-5 text-white bg-dark rounded-3 shadow mb-5">
-                    <h1 class="fw-lighter">Welcome</h1>
-                    <p>The objective of this group is to help each other learn, through knowledge sharing, mentoring and
-                        co-coding. Ideally in real life. All technologies, levels, ages and genders are very welcome.
-                        Let code, chat or have a drink
-                        together.</p>
-                    <hr class="bg-white text-white bg-white">
+                <div class="p-5 mb-4 bg-light rounded-3 mt-5">
+                    <div class="container-fluid ">
+                        <h5 class="display-6 fw-bold">Welcome</h5>
+                        <p class="col-md-8 fs-4">The objective of The Social Programmers is to help each other learn, through knowledge sharing, mentoring and
+                            co-coding. Ideally face to face, in real life. All technologies, levels, ages and genders are very welcome.
+                            Let's code, chat or have a drink together.</p>
+                        {% if not app.user %}
+                        <a href="{{ path('app_register') }}" class="btn btn-success btn-lg">Register</a>
+                        <a href="{{ path('app_login') }}" class="btn btn-outline-dark btn-lg">Login</a>
+                        {% endif %}
+                    </div>
                 </div>
 
-                <div class="row">
-                    <h3 class="fw-light mb-4">Upcoming events</h3>
-                    <div class="col-md-6">
-                        <div class="card text-white bg-dark border-0 shadow">
-                            <img class="card-img-top w-100"
-                                 src="https://maps.google.com/maps/api/staticmap?markers=icon%3Ahttps%3A%2F%2Fsecure.meetupstatic.com%2Fs%2Fimg%2F5961591462445047%2Fmup-custom-google-map-pin.png%7C50.074510%2C14.439285&zoom=17&size=480x300&sensor=false&key=AIzaSyA3fSxhHZNQNfMjJuMFvmULACXrBfFz9jQ&signature=kknlUxm75E_MaybRzxULn6RSDZ8%3D"/>
-                            <div class="card-body">
-                                <b>Coding Session - Web Dev</b>
-                                <div>30.09.2021 @ 18:30-21:30</div>
+                <div class="row mt-5">
+                    <h5 class="mb-3 text-secondary">Upcoming events</h5>
+                    {% for event in upcomingEvents %}
+                        <div class="col-md-4">
+                            <div class="card border-0">
+                                <div class="card-body">
+                                    <b>{{ event.title }}</b>
+                                    <div>{{ event.startsAt|date }}</div>
+                                </div>
+                                <a class="stretched-link"
+                                   href="{{ path('event', {id: event.id}) }}"></a>
                             </div>
-                            <a class="stretched-link" target="_blank" href="https://www.facebook.com/events/183059493941471/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D"></a>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
 
             </div>

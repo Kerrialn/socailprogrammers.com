@@ -1,0 +1,12 @@
+.vh-80{
+    min-height: 80vh;
+}
+
+body {
+    background-color: rgba(0,0,0, 0.05) !important;
+}
+
+.avatar{
+    background-size: cover;
+    object-fit: cover;
+}

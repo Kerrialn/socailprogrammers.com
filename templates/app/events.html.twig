@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center vh-80 mt-4">
+            <div class="col-md-8">
+
+                <div class="row">
+
+                    {% for event in events %}
+                        <div class="card border-0 shadow mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="m-0">{{ event.title }}</h5>
+                                    <h5 class="m-0">{% if event.isAttending(app.user) %}<i
+                                                class="bi bi-calendar-check"></i>{% endif %}</h5>
+                                </div>
+                                <div>{{ event.startsAt|format_datetime(locale='app.user.timezone') }}</div>
+                            </div>
+                            <a class="stretched-link" href="{{ path('event', {id: event.id}) }}"></a>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

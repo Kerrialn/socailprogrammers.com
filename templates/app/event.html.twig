@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+
+        <div class="row justify-content-center vh-80 mt-4">
+
+            <div class="col-md-12">
+
+                <a class="btn btn-outline-dark mb-3"
+                   href="{{ path('events') }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <i class="bi bi-arrow-left-circle-fill h2 m-0 me-3"></i>
+                        {% trans %}event.all-events{% endtrans %}
+                    </div>
+                </a>
+
+                {% if event.isEventInProgress %}
+                    <div class="alert alert-warning text-center">
+                        {% trans %}event.inprogress{% endtrans %}
+                        {% if event.isOnline and event.isAttending(app.user) %}
+                            <a target="_blank" href="{{ event.link }}">
+                                {% trans %}event.join-online{% endtrans %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card border-0 mb-3">
+                    <div class="row g-0">
+                        <div class="col-4">
+                            <img src="{{ event.host.avatar }}" class="img-fluid h-100 rounded-start"
+                                 alt="{{ event.host.name }}">
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body">
+                                <h5 class="">{{ event.host.name }}</h5>
+                                <hr/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3 mt-3">
+                    {% if event.isAttending(app.user) and app.user is not same as event.host %}
+                        <a href="{{ path('leave.event', {id: event.id}) }}"
+                           class="btn btn-danger w-100">{% trans %}event.leave{% endtrans %}</a>
+                    {% elseif event.isAttending(app.user) and app.user is same as event.host %}
+                    {% else %}
+                        {% if event.isCurrentDateBeforeRsvpByDate or event.rsvpBy is null %}
+                            <a href="{{ path('join.event', {id: event.id}) }}" class="btn btn-dark w-100">Join
+                                event</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="card border-0 mb-3">
+                    <div class="card-body">
+                        <h1 class="display-5">{{ event.title }}</h1>
+                        <div class="h5">
+                            {{ event.startsAt|format_datetime(pattern="ccc dd.MM.yy @ HH:mm", locale='app.user.timezone') }}
+                            <i class="bi bi-dash-lg"></i>
+                            {{ event.endsAt|format_datetime(pattern="ccc dd.MM.yy @ HH:mm", locale='app.user.timezone') }}
+                        </div>
+
+                        <div class="text-muted">RSVP
+                            before: {{ event.rsvpBy|format_datetime(pattern="dd.MM.yy", locale='app.user.timezone') }}</div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            {{ event.description|raw }}
+                        </li>
+                    </ul>
+                </div>
+
+                {% if not event.isOnline and event.isAttending(app.user) %}
+                    <div class="card border-0 mb-3">
+                        <div class="card-body">
+                            <h5 class="fw-light">{% trans %}event.location{% endtrans %}</h5>
+                        </div>
+                        <img class="img-fluid"
+                             src="https://images.pexels.com/photos/38271/ipad-map-tablet-internet-38271.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"/>
+                    </div>
+                {% endif %}
+
+                <div class="card border-0 ">
+                    <div class="card-body">
+                        <h5 class="fw-light">{% trans %}event.participants{% endtrans %}</h5>
+                        <hr class="mt-0"/>
+                        <div class="d-flex align-items-center">
+                            {% for participant in event.participants %}
+                                <div class="bg-light rounded p-2">
+                                    <img src="{{ participant.user.avatar }}" width="30" height="30"
+                                         class="rounded-circle"
+                                         alt="{{ participant.user.name }}">
+                                    {{ participant.user.name }}
+                                </div>
+                            {% else %}
+                                {% if event.isCurrentDateBeforeRsvpByDate %}
+                                    Be brave and be the first one to join this event.
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

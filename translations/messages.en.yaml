@@ -1,0 +1,15 @@
+
+event:
+  form:
+    title: 'Title'
+    description: 'Description'
+    start-end-date: 'Start & end date'
+    rsvp-date: 'RSVP date'
+    online-link: 'Online meeting link'
+    save: 'save'
+  inprogress: 'This event is in progress right now'
+  join-online: 'Join Event Online'
+  leave: 'Leave event'
+  location: 'Where is it?'
+  participants: 'Who is going?'
+  all-events: 'Events'
