@@ -21,6 +21,11 @@
                             <span class="input-group-text">{{ 'event.form.rsvp-date'|trans }}</span>
                             {{ form_widget(eventForm.rsvpBy) }}
                         </div>
+                        <div class="input-group mb-3">
+                            {{ form_widget(eventForm.latitude) }}
+                            {{ form_widget(eventForm.longitude) }}
+                        </div>
+
                         {{ form_row(eventForm.isOnline) }}
                         {{ form_row(eventForm.link) }}
                         <div class="text-end">

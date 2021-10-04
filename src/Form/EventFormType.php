@@ -37,15 +37,24 @@ class EventFormType extends AbstractType
             ])
             ->add('startsAt', DateTimeType::class, [
                 'widget' => 'single_text',
+                'input'  => 'datetime_immutable'
             ])
             ->add('endsAt', DateTimeType::class, [
                 'widget' => 'single_text',
+                'input'  => 'datetime_immutable'
             ])
             ->add('rsvpBy', DateTimeType::class, [
                 'label' => $this->translator->trans('event.form.rsvp-date'),
                 'widget' => 'single_text',
+                'input'  => 'datetime_immutable'
             ])
             ->add('isOnline', CheckboxType::class, [
+                'required' => false
+            ])
+            ->add('latitude', TextType::class, [
+                'required' => false
+            ])
+            ->add('longitude', TextType::class, [
                 'required' => false
             ])
             ->add('link', UrlType::class, [

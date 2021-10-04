@@ -4,45 +4,40 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Participant;
-use App\Entity\User;
 use App\Form\EventFormType;
 use App\Repository\EventRepository;
 use App\Repository\ParticipantRepository;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
+use App\Service\StaticGoogleMapService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function dump;
 
 class EventController extends AbstractController
 {
 
     public function __construct(
         private EventRepository $eventRepository,
-        private ParticipantRepository $participantRepository
+        private ParticipantRepository $participantRepository,
+        private StaticGoogleMapService $staticGoogleMapService,
     ) {
     }
 
-    #[Route('/event/create', name: 'event.create')]
+    #[Route('/events/create', name: 'event.create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request): Response
     {
-
         $event = new Event();
         $form = $this->createForm(EventFormType::class, $event);
+        $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            dump('hi');
-            die;
-//           return $this->handleCreateForm($form, $event);
+           return $this->handleCreateForm($form, $event);
         }
 
         return $this->render('event/create.html.twig', [
@@ -50,8 +45,9 @@ class EventController extends AbstractController
         ]);
     }
 
+
     #[Route('/events', name: 'events')]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_ADMIN')]
     public function events(): Response
     {
         $events = $this->eventRepository->findAllIncomplete();
@@ -61,7 +57,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/events/{id}', name: 'event')]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_ADMIN')]
     public function event(Event $event): Response
     {
         return $this->render('app/event.html.twig', [
@@ -70,7 +66,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/events/{id}/join', name: 'join.event')]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_ADMIN')]
     public function join(Event $event): RedirectResponse
     {
         $participant = $this->participantRepository->isUserAttending($event, $this->getUser());
@@ -90,7 +86,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/events/{id}/leave', name: 'leave.event')]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_ADMIN')]
     public function leave(Event $event): RedirectResponse
     {
         /**
@@ -127,13 +123,17 @@ class EventController extends AbstractController
             $event->setIsOnline(false);
         }
 
-        $event->setLatitude('500000');
-        $event->setLongitude('100000');
+       $latitude = $form->get('latitude')->getData();
+       $longitude = $form->get('longitude')->getData();
+
+       $image = $this->staticGoogleMapService->getStaticImage($event, $this->getParameter('GOOGLE_MAPS_PUBLIC_KEY'));
+
+       $event->setMap($image);
 
         $this->eventRepository->save($event);
         $this->getParticipant($user, $event);
 
-//        return $this->redirectToRoute('events');
+        return $this->redirectToRoute('events');
 
     }
 

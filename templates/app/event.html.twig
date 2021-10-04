@@ -4,10 +4,7 @@
 
 {% block body %}
     <div class="container">
-
-
         <div class="row justify-content-center vh-80 mt-4">
-
             <div class="col-md-12">
 
                 <a class="btn btn-outline-dark mb-3"
@@ -86,8 +83,11 @@
                         <div class="card-body">
                             <h5 class="fw-light">{% trans %}event.location{% endtrans %}</h5>
                         </div>
-                        <img class="img-fluid"
-                             src="https://images.pexels.com/photos/38271/ipad-map-tablet-internet-38271.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"/>
+
+                        <a href="https://www.google.com/maps/place/{{ event.latitude }}/@{{ event.longitude }}">
+                            open google maps
+                        </a>
+
                     </div>
                 {% endif %}
 

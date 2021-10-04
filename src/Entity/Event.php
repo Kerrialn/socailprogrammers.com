@@ -87,6 +87,11 @@ class Event
      */
     private bool $isOnline;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $map;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -300,6 +305,18 @@ class Event
     public function setIsOnline(bool $isOnline): self
     {
         $this->isOnline = $isOnline;
+
+        return $this;
+    }
+
+    public function getMap(): ?string
+    {
+        return $this->map;
+    }
+
+    public function setMap(?string $map): self
+    {
+        $this->map = $map;
 
         return $this;
     }
