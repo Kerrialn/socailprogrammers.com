@@ -24,14 +24,17 @@ class AppController extends AbstractController
     {
     }
 
+    #[Route('/terms-of-use', name: 'app.terms')]
+    public function terms(): Response
+    {
+        return $this->render('app/terms.html.twig');
+    }
+
+
     #[Route('/', name: 'app.landing.page')]
     public function index(): Response
     {
-        $upcomingEvents = $this->eventRepository->findAllUpcoming();
-
-        return $this->render('app/index.html.twig', [
-            'upcomingEvents' => $upcomingEvents
-        ]);
+        return $this->render('app/index.html.twig');
     }
 
 

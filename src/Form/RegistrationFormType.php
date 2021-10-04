@@ -14,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use function sprintf;
 
 class RegistrationFormType extends AbstractType
 {
@@ -34,7 +35,8 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'I agree to the terms of use',
+                'label' => 'I agree to the <a href="/terms-of-use">terms of use</a>',
+                'label_html' => true,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'to continue you have to agree to the terms',
